@@ -1,0 +1,105 @@
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+int plane_x,plane_y;
+int bullet_x,bullet_y;
+int enemy_x,enemy_y;
+char input;
+int isfire=0;
+int speed=1;
+void start()//初始化一开始飞机的位置，子弹的位置初始化不应该在这里，因为子弹一开始的位置应该根据第一次输入空格时飞机位置得到
+{
+	plane_x=10;
+	plane_y=10;
+	enemy_y=0;
+	enemy_x=rand()%30+3;
+}
+
+void show()
+{
+	system("cls");
+	int i,j;
+	if (speed%15==0)
+		enemy_y++;
+	for (j=0;j<enemy_y;j++)
+		printf("\n");
+	for (i=0;i<enemy_x;i++)
+		printf(" ");
+	speed++;
+	if (enemy_y==plane_y-1)
+	{
+		enemy_x=rand()%30+3;
+		enemy_y=0;
+	}
+	
+	if (enemy_x==bullet_x&&enemy_y==bullet_y)
+	{
+		printf("*\n");
+		enemy_x=rand()%30+3;
+		enemy_y=0;
+	}
+	else
+		printf("W\n");
+	if (isfire)
+	{
+		for (i=0;i<bullet_y-enemy_y+1;i++)
+			printf("\n");
+		for (j=0;j<bullet_x;j++)
+			printf(" ");
+		printf("|\n");
+		for (i=1;i<plane_y-bullet_y-enemy_y+1;i++)//这个是打印子弹与机头之间的空行
+			printf("\n");
+		bullet_y--;//每次子弹都向上移动一次
+		if (bullet_y==0||enemy_y==bullet_y+1)//当子弹飞到第一行的时候不再显示子弹
+		{
+			bullet_x=plane_x+3;
+			bullet_y=plane_y-1;
+			isfire=0;
+		}
+
+	}
+	else
+		for(i=1;i<plane_y-enemy_y+1;i++)
+			printf("\n");
+	for(j=0;j<plane_x;j++)
+		printf(" ");
+	printf("   n\n");
+	for(j=0;j<plane_x;j++)
+		printf(" ");
+	printf("<=====>\n");
+	for(j=0;j<plane_x;j++)
+		printf(" ");
+	printf("   H\n");
+
+}
+void Input()
+{	
+	if (kbhit())
+	{
+		input=getch();
+		if (input=='a')
+			plane_x--;
+		if (input=='d')
+			plane_x++;
+		if (input=='w')
+			plane_y--;
+		if (input=='s')
+			plane_y++;
+		if (input==' ')//当输入空格发射子弹，且仅当输入空格时再根据此时飞机的位置定义子弹的位置，就不会出现子弹延迟的状况
+		{
+			bullet_y=plane_y-1;
+			bullet_x=plane_x+3;
+			isfire=1;
+		}
+	}
+}
+int main()
+{
+	start();
+	while (1)
+	{
+		show();
+		Input();
+	}
+	return 0;
+}
