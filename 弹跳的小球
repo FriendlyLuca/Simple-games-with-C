@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<windows.h>
+int main()
+{
+	int i,j,x,y,v,k,v2,t;
+	const hight=25;//这是定义小球在多高的方框内弹
+	const wide=40;//定义方框宽度
+	t=0;
+	v=1;//小球垂直方向速度
+	v2=2;//小球水平方向速度
+	y=0;
+	for(t=0,x=0;;t++)
+	{
+		x+=v;
+		y+=v2;
+		Sleep(50);
+		system("cls");
+		for(i=0;i<x;i++)
+			printf("                                         |\n");
+		for(j=0;j<y;j++)
+			printf(" ");
+		printf("o");
+		for(j=y;j<wide;j++)
+			printf(" ");
+		printf("|\n");
+		for(i=x;i<hight;i++)
+			printf("                                         |\n");
+		printf("-----------------------------------------|");//底边
+		if (x==0||x==hight)//遇到上下边速度反向
+			v=-v;
+		if (y==0||y==wide)//遇到左右边速度反向
+			v2=-v2;
+
+	}
+	return 0;
+}
